@@ -1,11 +1,13 @@
 module Guppy
-  class Db
+  class DB
     def self.file_type(file_name)
       case File.extname(file_name).downcase
       when '.tcx'
         TCX
       when '.gpx'
         GPX
+      when '.fit'
+        FIT
       else
         raise "Unknown filetype"
       end
@@ -21,16 +23,18 @@ module Guppy
       @file_name = file
     end
     
-    def parse
+    def parse 
       case self.class.file_type(@file_name)
       when TCX
         @doc = Guppy::TcxParser.open(@file_name)
       when GPX
         @doc = Guppy::GpxParser.open(@file_name)
+      when FIT
+        @doc = Guppy::FitParser.open(@file_name)
       end
     end
 
-    def activities
+    def activities 
       @doc.activities
     end
 
